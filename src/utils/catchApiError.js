@@ -5,7 +5,9 @@ export function catchApiError(fn) {
     try {
       return await fn(...args);
     } catch (error) {
-      useAppStore.getState().setError(error.response?.data?.message || 'Something went wrong!');
+      useAppStore
+        .getState()
+        .setError(error.response?.data?.message || 'Something went wrong!');
 
       console.dir(error);
     }

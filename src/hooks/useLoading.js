@@ -5,13 +5,16 @@ function useLoading(initialValue = false) {
 
   const startLoading = () => setLoading(true);
   const stopLoading = () => setLoading(false);
-  const toggleLoading = () => setLoading((prev) => !prev);
+  const toggleLoading = () => setLoading(prev => !prev);
 
-  const loader = useMemo(() => ({
-    startLoading,
-    stopLoading,
-    toggleLoading
-  }), [])
+  const loader = useMemo(
+    () => ({
+      startLoading,
+      stopLoading,
+      toggleLoading,
+    }),
+    [],
+  );
 
   return [loading, loader];
 }

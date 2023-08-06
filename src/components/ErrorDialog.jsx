@@ -1,4 +1,10 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+} from '@mui/material';
 import useAppStore from '../state/stores/appStore';
 
 const ErrorDialog = () => {
@@ -8,7 +14,7 @@ const ErrorDialog = () => {
   const handleCloseError = () => setError(null);
 
   return (
-    <Dialog open={!!error} onClose={handleCloseError} >
+    <Dialog open={!!error} onClose={handleCloseError}>
       <DialogTitle>Oops!</DialogTitle>
       <DialogContent>{error}</DialogContent>
       <DialogActions>
