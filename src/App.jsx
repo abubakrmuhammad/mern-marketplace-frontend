@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import useLoading from './hooks/useLoading';
 import ErrorSnackbar from './components/ErrorSnackbar';
 import SuccessSnackbar from './components/SuccessSnackbar';
+import ConfirmationDialog from './components/ConfirmationDialog';
 
 function App() {
   const checkAuth = useAuthStore(state => state.checkAuth);
@@ -47,6 +48,8 @@ function App() {
       {/* <ErrorDialog /> */}
       <ErrorSnackbar />
       <SuccessSnackbar />
+
+      <ConfirmationDialog />
     </>
   );
 }

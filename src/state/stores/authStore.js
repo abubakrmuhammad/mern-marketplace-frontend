@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import api from '../../api/api';
 import { catchApiError } from '../../utils/catchApiError';
+import isApiSuccessful from '../../utils/isApiSuccessful';
 
 const useAuthStore = create(set => {
   const checkAuth = async () => {
@@ -21,6 +22,8 @@ const useAuthStore = create(set => {
       isAuthenticated: true,
       isAdmin: response.data.data.role === 'admin',
     });
+
+    return isApiSuccessful(response);
   };
 
   const signup = async ({ name, email, password, passwordConfirm }) => {
@@ -41,6 +44,8 @@ const useAuthStore = create(set => {
     });
 
     localStorage.setItem('token', JSON.stringify(response.data.token));
+
+    return isApiSuccessful(response);
   };
 
   const login = async ({ email, password }) => {
@@ -55,6 +60,8 @@ const useAuthStore = create(set => {
     });
 
     localStorage.setItem('token', JSON.stringify(response.data.token));
+
+    return isApiSuccessful(response);
   };
 
   const logout = async () => {
@@ -69,6 +76,8 @@ const useAuthStore = create(set => {
     });
 
     localStorage.removeItem('token');
+
+    return isApiSuccessful(response);
   };
 
   return {

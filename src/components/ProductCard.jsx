@@ -5,11 +5,39 @@ import {
   Typography,
   CardHeader,
   Avatar,
+  CardActions,
+  IconButton,
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { getApiImageUrl } from '../utils/getApiStorageUrl';
+import useConfirmationDialog from '../hooks/useConfirmationDialog';
+import { useCallback } from 'react';
+import useProductsStore from '../state/stores/productsStore';
+import useAppStore from '../state/stores/appStore';
 
-function ProductCard({ product }) {
+function ProductCard({ product, deletable = false }) {
   const { title, price, imageCover, category, description, seller } = product;
+
+  const { openDialog, setConfirmationDialogConfirmHandler } =
+    useConfirmationDialog();
+  const deleteUserProduct = useProductsStore(state => state.deleteUserProduct);
+  const setSuccess = useAppStore(state => state.setSuccess);
+
+  const onDeleteClick = useCallback(() => {
+    setConfirmationDialogConfirmHandler(async () => {
+      const resp = await deleteUserProduct(product._id);
+
+      if (resp.success) setSuccess('Product deleted successfully.');
+    });
+
+    openDialog();
+  }, [
+    deleteUserProduct,
+    openDialog,
+    product._id,
+    setConfirmationDialogConfirmHandler,
+    setSuccess,
+  ]);
 
   return (
     <Card>
@@ -37,6 +65,19 @@ function ProductCard({ product }) {
           {description}
         </Typography>
       </CardContent>
+
+      <CardActions
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+        }}
+      >
+        {deletable && (
+          <IconButton color='error' onClick={onDeleteClick}>
+            <DeleteIcon />
+          </IconButton>
+        )}
+      </CardActions>
     </Card>
   );
 }

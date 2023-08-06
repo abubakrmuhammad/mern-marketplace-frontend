@@ -9,6 +9,7 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
+  Avatar,
 } from '@mui/material';
 import { Logout, Person2, Add } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
@@ -18,6 +19,7 @@ import useLoading from '../hooks/useLoading';
 import { useNavigate } from 'react-router-dom';
 
 function Navbar() {
+  const user = useAuthStore(state => state.user);
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   const isAdmin = useAuthStore(state => state.isAdmin);
   const logout = useAuthStore(state => state.logout);
@@ -82,6 +84,16 @@ function Navbar() {
                 }}
               >
                 My Account
+                <Avatar
+                  sx={{
+                    width: 32,
+                    height: 32,
+                    fontSize: 14,
+                    ml: 1,
+                  }}
+                >
+                  {user?.name?.[0]}
+                </Avatar>
               </Button>
 
               <Menu

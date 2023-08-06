@@ -49,7 +49,9 @@ function AddProductView() {
       values.images.forEach(image => formData.append('images', image));
       formData.append('seller', user._id);
 
-      await createProduct(formData);
+      const resp = await createProduct(formData);
+
+      if (!resp.success) return;
 
       setSuccessCloseHandler(() => navigate('/'));
       setSuccess('Product added successfully.');

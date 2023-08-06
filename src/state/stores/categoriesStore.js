@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { catchApiError } from '../../utils/catchApiError';
 import api from '../../api/api';
+import isApiSuccessful from '../../utils/isApiSuccessful';
 
 const useCategoriesStore = create((set, get) => {
   const getAllCategories = async () => {
@@ -9,6 +10,8 @@ const useCategoriesStore = create((set, get) => {
     console.log('getAllCategories', response);
 
     set({ categories: response.data.data.data });
+
+    return isApiSuccessful(response);
   };
 
   const createCategory = async data => {
@@ -19,6 +22,8 @@ const useCategoriesStore = create((set, get) => {
     const categories = [...get().categories, response.data.data.data];
 
     set({ categories });
+
+    return isApiSuccessful(response);
   };
 
   const deleteCategory = async id => {
@@ -29,6 +34,8 @@ const useCategoriesStore = create((set, get) => {
     const categories = get().categories.filter(category => category._id !== id);
 
     set({ categories });
+
+    return isApiSuccessful(response);
   };
 
   return {

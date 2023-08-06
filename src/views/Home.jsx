@@ -4,10 +4,12 @@ import useProductsStore from '../state/stores/productsStore';
 import ProductCard from '../components/ProductCard';
 import useLoading from '../hooks/useLoading';
 import DefaultLoader from '../components/DefaultLoader';
+import useAuthStore from '../state/stores/authStore';
 
 const HomeView = () => {
   const products = useProductsStore(state => state.products);
   const getAllProducts = useProductsStore(state => state.getAllProducts);
+  const user = useAuthStore(state => state.user);
 
   const [loading, loader] = useLoading(true);
 
@@ -30,7 +32,10 @@ const HomeView = () => {
 
         {products.map(product => (
           <Grid item xs={12} sm={6} md={4} key={product._id}>
-            <ProductCard product={product} />
+            <ProductCard
+              product={product}
+              deletable={product.seller._id === user._id}
+            />
           </Grid>
         ))}
       </Grid>
