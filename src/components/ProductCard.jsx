@@ -25,9 +25,9 @@ function ProductCard({ product, deletable = false }) {
 
   const onDeleteClick = useCallback(() => {
     setConfirmationDialogConfirmHandler(async () => {
-      const resp = await deleteUserProduct(product._id);
+      const success = await deleteUserProduct(product._id);
 
-      if (resp.success) setSuccess('Product deleted successfully.');
+      if (success) setSuccess('Product deleted successfully.');
     });
 
     openDialog();

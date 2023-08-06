@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import * as Yup from 'yup';
 import useAuthStore from '../state/stores/authStore';
+import Layout from '../components/Layout';
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -36,51 +37,50 @@ function LoginView() {
   if (isAuthenticated) return <Navigate to='/' replace />;
 
   return (
-    <Container maxWidth='xs'>
-      <Paper elevation={3} sx={{ padding: 3 }}>
-        <form onSubmit={formik.handleSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant='h5'>Login</Typography>
+    <Layout>
+      <Container maxWidth='xs'>
+        <Paper elevation={3} sx={{ padding: 3 }}>
+          <form onSubmit={formik.handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant='h5'>Login</Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label='Email'
+                  variant='outlined'
+                  {...formik.getFieldProps('email')}
+                  error={formik.touched.email && !!formik.errors.email}
+                  helperText={formik.touched.email && formik.errors.email}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label='Password'
+                  type='password'
+                  variant='outlined'
+                  {...formik.getFieldProps('password')}
+                  error={formik.touched.password && !!formik.errors.password}
+                  helperText={formik.touched.password && formik.errors.password}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  type='submit'
+                  variant='contained'
+                  color='primary'
+                  disabled={formik.isSubmitting}
+                >
+                  Login
+                </Button>
+              </Grid>
             </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label='Email'
-                variant='outlined'
-                {...formik.getFieldProps('email')}
-                error={formik.touched.email && !!formik.errors.email}
-                helperText={formik.touched.email && formik.errors.email}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label='Password'
-                type='password'
-                variant='outlined'
-                {...formik.getFieldProps('password')}
-                error={formik.touched.password && !!formik.errors.password}
-                helperText={formik.touched.password && formik.errors.password}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <Button
-                type='submit'
-                variant='contained'
-                color='primary'
-                disabled={formik.isSubmitting}
-              >
-                Login
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      </Paper>
-    </Container>
+          </form>
+        </Paper>
+      </Container>
+    </Layout>
   );
 }
 

@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 
 const useAppStore = create((set, get) => ({
+  drawerWidth: 320,
+  setDrawerWidth: width => set({ drawerWidth: width }),
   error: null,
   setError: (data = 'Something went wrong!') => set({ error: data }),
   success: null,

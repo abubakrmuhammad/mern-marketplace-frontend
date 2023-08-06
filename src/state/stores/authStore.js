@@ -20,7 +20,7 @@ const useAuthStore = create(set => {
     set({
       user: response.data.data.data,
       isAuthenticated: true,
-      isAdmin: response.data.data.role === 'admin',
+      isAdmin: response.data.data.data.role === 'admin',
     });
 
     return isApiSuccessful(response);
