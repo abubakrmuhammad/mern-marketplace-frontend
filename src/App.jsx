@@ -2,10 +2,12 @@ import { ThemeProvider } from '@mui/material/styles';
 import { CircularProgress } from '@mui/material';
 import Router from './routes';
 import theme from './theme';
-import ErrorDialog from './components/ErrorDialog';
+// import ErrorDialog from './components/ErrorDialog';
 import useAuthStore from './state/stores/authStore';
 import { useEffect } from 'react';
 import useLoading from './hooks/useLoading';
+import ErrorSnackbar from './components/ErrorSnackbar';
+import SuccessSnackbar from './components/SuccessSnackbar';
 
 function App() {
   const checkAuth = useAuthStore(state => state.checkAuth);
@@ -42,7 +44,9 @@ function App() {
         <Router />
       </ThemeProvider>
 
-      <ErrorDialog />
+      {/* <ErrorDialog /> */}
+      <ErrorSnackbar />
+      <SuccessSnackbar />
     </>
   );
 }

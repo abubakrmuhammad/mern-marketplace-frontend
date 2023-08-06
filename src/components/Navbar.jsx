@@ -5,10 +5,15 @@ import {
   Link,
   Container,
   Button,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
 } from '@mui/material';
+import { Logout, Person2, Add } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
 import useAuthStore from '../state/stores/authStore';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import useLoading from '../hooks/useLoading';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,6 +25,7 @@ function Navbar() {
   const navigate = useNavigate();
 
   const [loggingOut, loggingOutLoader] = useLoading();
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const logoutHandler = useCallback(async () => {
     loggingOutLoader.startLoading();
@@ -30,6 +36,14 @@ function Navbar() {
 
     navigate('/login');
   }, [loggingOutLoader, logout, navigate]);
+
+  const openAccountMenu = useCallback(event => {
+    setAnchorEl(event.currentTarget);
+  }, []);
+
+  const closeAccountMenu = useCallback(() => {
+    setAnchorEl(null);
+  }, []);
 
   return (
     <AppBar position='static'>
@@ -58,25 +72,70 @@ function Navbar() {
 
           {isAuthenticated && (
             <>
-              <Link
-                component={RouterLink}
-                to='/profile'
-                sx={{ color: 'white', ml: 2 }}
-              >
-                My Account
-              </Link>
-
               <Button
                 variant='text'
-                onClick={logoutHandler}
+                onClick={openAccountMenu}
                 sx={{
                   ml: 2,
                   color: 'white',
                   '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.08)' },
                 }}
               >
-                {loggingOut ? 'Logging out...' : 'Logout'}
+                My Account
               </Button>
+
+              <Menu
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorEl)}
+                onClose={closeAccountMenu}
+              >
+                <MenuItem
+                  onClick={() => {
+                    navigate('/sell');
+                    closeAccountMenu();
+                  }}
+                >
+                  <ListItemIcon>
+                    <Add fontSize='small' />
+                  </ListItemIcon>
+                  <ListItemText>Add Product</ListItemText>
+                </MenuItem>
+
+                <MenuItem
+                  onClick={() => {
+                    navigate('/profile');
+                    closeAccountMenu();
+                  }}
+                >
+                  <ListItemIcon>
+                    <Person2 fontSize='small' />
+                  </ListItemIcon>
+                  <ListItemText>Profile</ListItemText>
+                </MenuItem>
+
+                <MenuItem
+                  onClick={async () => {
+                    await logoutHandler();
+                    closeAccountMenu();
+                  }}
+                >
+                  <ListItemIcon>
+                    <Logout fontSize='small' />
+                  </ListItemIcon>
+                  <ListItemText>
+                    {loggingOut ? 'Logging out...' : 'Logout'}
+                  </ListItemText>
+                </MenuItem>
+              </Menu>
             </>
           )}
 

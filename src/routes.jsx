@@ -5,6 +5,7 @@ import SignUpView from './views/Signup';
 import Admin from './views/admin/Admin';
 import RequireAuth from './components/RequireAuth';
 import Layout from './components/Layout';
+import AddProductView from './views/AddProduct';
 
 function Router() {
   return (
@@ -21,6 +22,16 @@ function Router() {
             element={
               <RequireAuth admin>
                 <Admin />
+              </RequireAuth>
+            }
+          />
+
+          <Route
+            exact
+            path='/sell'
+            element={
+              <RequireAuth>
+                <AddProductView />
               </RequireAuth>
             }
           />

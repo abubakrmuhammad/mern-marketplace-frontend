@@ -11,9 +11,16 @@ const useProductsStore = create(set => {
     set({ products: response.data.data.data });
   };
 
+  const createProduct = async data => {
+    const response = await api.post('/products', data);
+
+    console.log('createProduct', response);
+  };
+
   return {
     products: [],
     getAllProducts: catchApiError(getAllProducts),
+    createProduct: catchApiError(createProduct),
   };
 });
 
