@@ -1,29 +1,15 @@
 import { useEffect } from 'react';
-import {
-  Typography,
-  Grid,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Container,
-} from '@mui/material';
+import { Typography, Grid, Container } from '@mui/material';
 import useProductsStore from '../state/stores/productsStore';
-import useAppStore from '../state/stores/appStore';
-import { getAllProducts } from '../api/products';
-import { getApiImageUrl } from '../utils/getApiStorageUrl';
 import ProductCard from '../components/ProductCard';
 
-const Home = () => {
+const HomeView = () => {
   const products = useProductsStore(state => state.products);
-  const setProducts = useProductsStore(state => state.setProducts);
-  const setError = useAppStore(state => state.setError);
+  const getAllProducts = useProductsStore(state => state.getAllProducts);
 
   useEffect(() => {
-    getAllProducts()
-      .then(({ data }) => setProducts(data.data.data))
-      .catch(err => setError(err.response.data.message));
-  }, [setProducts, setError]);
+    getAllProducts();
+  }, [getAllProducts]);
 
   return (
     <Container>
@@ -46,4 +32,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomeView;

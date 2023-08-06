@@ -1,7 +1,7 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './views/Home';
-import Login from './views/Login';
-import SignUp from './views/SIgnup';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import HomeView from './views/Home';
+import LoginView from './views/Login';
+import SignUpView from './views/Signup';
 import Admin from './views/admin/Admin';
 import RequireAuth from './components/RequireAuth';
 import Layout from './components/Layout';
@@ -11,19 +11,21 @@ function Router() {
     <BrowserRouter>
       <Layout>
         <Routes>
-          <Route exact path='/' element={<Home />} />
-          <Route exact path='/login' element={<Login />} />
-          <Route exact path='/signup' element={<SignUp />} />
+          <Route exact path='/' element={<HomeView />} />
+          <Route exact path='/login' element={<LoginView />} />
+          <Route exact path='/signup' element={<SignUpView />} />
 
           <Route
             exact
             path='/admin'
             element={
-              <RequireAuth>
+              <RequireAuth admin>
                 <Admin />
               </RequireAuth>
             }
           />
+
+          <Route path='*' element={<Navigate to='/' replace />} />
         </Routes>
       </Layout>
     </BrowserRouter>

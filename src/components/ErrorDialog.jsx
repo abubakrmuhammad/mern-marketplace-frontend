@@ -8,8 +8,8 @@ const ErrorDialog = () => {
   const handleCloseError = () => setError(null);
 
   return (
-    <Dialog open={!!error} onClose={handleCloseError}>
-      <DialogTitle>Error</DialogTitle>
+    <Dialog open={!!error} onClose={handleCloseError} >
+      <DialogTitle>Oops!</DialogTitle>
       <DialogContent>{error}</DialogContent>
       <DialogActions>
         <Button onClick={handleCloseError}>Close</Button>
