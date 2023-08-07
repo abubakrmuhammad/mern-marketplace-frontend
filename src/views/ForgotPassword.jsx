@@ -1,4 +1,4 @@
-import { Navigate, Link as RouterLink } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import {
   Button,
@@ -7,32 +7,33 @@ import {
   TextField,
   Paper,
   Container,
-  FormHelperText,
-  Link,
 } from '@mui/material';
 import * as Yup from 'yup';
 import useAuthStore from '../state/stores/authStore';
 import Layout from '../components/Layout';
+import useAppStore from '../state/stores/appStore';
 
 const validationSchema = Yup.object({
   email: Yup.string()
     .email('Invalid email address')
     .required('Email is required'),
-  password: Yup.string().required('Password is required'),
 });
 
-function LoginView() {
-  const login = useAuthStore(state => state.login);
+function ForgotPasswordView() {
+  const forgotPassword = useAuthStore(state => state.forgotPassword);
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+
+  const setSuccess = useAppStore(state => state.setSuccess);
 
   const formik = useFormik({
     initialValues: {
       email: '',
-      password: '',
     },
     validationSchema: validationSchema,
-    onSubmit: async () => {
-      await login(formik.values);
+    onSubmit: async values => {
+      const success = await forgotPassword(values.email);
+
+      if (success) setSuccess('An email has been sent to your inbox.');
     },
   });
 
@@ -45,7 +46,7 @@ function LoginView() {
           <form onSubmit={formik.handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <Typography variant='h5'>Login</Typography>
+                <Typography variant='h5'>Recover Password</Typography>
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -57,27 +58,7 @@ function LoginView() {
                   helperText={formik.touched.email && formik.errors.email}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label='Password'
-                  type='password'
-                  variant='outlined'
-                  {...formik.getFieldProps('password')}
-                  error={formik.touched.password && !!formik.errors.password}
-                  helperText={formik.touched.password && formik.errors.password}
-                />
 
-                <FormHelperText>
-                  <Link
-                    component={RouterLink}
-                    to='/forgot-password'
-                    sx={{ ml: 0.5, mt: 1 }}
-                  >
-                    Forgot password?
-                  </Link>
-                </FormHelperText>
-              </Grid>
               <Grid item xs={12}>
                 <Button
                   type='submit'
@@ -85,7 +66,7 @@ function LoginView() {
                   color='primary'
                   disabled={formik.isSubmitting}
                 >
-                  Login
+                  Recover
                 </Button>
               </Grid>
             </Grid>
@@ -96,4 +77,4 @@ function LoginView() {
   );
 }
 
-export default LoginView;
+export default ForgotPasswordView;

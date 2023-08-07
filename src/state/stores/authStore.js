@@ -64,6 +64,14 @@ const useAuthStore = create(set => {
     return isApiSuccessful(response);
   };
 
+  const forgotPassword = async email => {
+    const response = await api.post('/users/forgotPassword', { email });
+
+    console.log('forgotPassword', response);
+
+    return isApiSuccessful(response);
+  };
+
   const logout = async () => {
     const response = await api.get('/users/logout');
 
@@ -88,6 +96,7 @@ const useAuthStore = create(set => {
     signup: catchApiError(signup),
     login: catchApiError(login),
     logout: catchApiError(logout),
+    forgotPassword: catchApiError(forgotPassword),
   };
 });
 
