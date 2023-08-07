@@ -14,6 +14,7 @@ import useConfirmationDialog from '../hooks/useConfirmationDialog';
 import { useCallback } from 'react';
 import useProductsStore from '../state/stores/productsStore';
 import useAppStore from '../state/stores/appStore';
+import { useNavigate } from 'react-router-dom';
 
 function ProductCard({ product, deletable = false }) {
   const { title, price, imageCover, category, description, seller } = product;
@@ -23,24 +24,38 @@ function ProductCard({ product, deletable = false }) {
   const deleteUserProduct = useProductsStore(state => state.deleteUserProduct);
   const setSuccess = useAppStore(state => state.setSuccess);
 
-  const onDeleteClick = useCallback(() => {
-    setConfirmationDialogConfirmHandler(async () => {
-      const success = await deleteUserProduct(product._id);
+  const navigate = useNavigate();
 
-      if (success) setSuccess('Product deleted successfully.');
-    });
+  const onDeleteClick = useCallback(
+    e => {
+      e.stopPropagation();
+      e.preventDefault();
+      e.nativeEvent.stopImmediatePropagation();
 
-    openDialog();
-  }, [
-    deleteUserProduct,
-    openDialog,
-    product._id,
-    setConfirmationDialogConfirmHandler,
-    setSuccess,
-  ]);
+      setConfirmationDialogConfirmHandler(async () => {
+        const success = await deleteUserProduct(product._id);
+
+        if (success) setSuccess('Product deleted successfully.');
+      });
+
+      openDialog();
+    },
+    [
+      deleteUserProduct,
+      openDialog,
+      product._id,
+      setConfirmationDialogConfirmHandler,
+      setSuccess,
+    ],
+  );
 
   return (
-    <Card>
+    <Card
+      onClick={() => navigate(`/p/${product.slug}`)}
+      sx={{
+        cursor: 'pointer',
+      }}
+    >
       <CardHeader
         avatar={<Avatar>{seller.name[0]}</Avatar>}
         title={seller.name}

@@ -11,18 +11,22 @@ import {
   ListItemText,
   Avatar,
 } from '@mui/material';
-import { Logout, Person2, Add } from '@mui/icons-material';
+import { Logout, Person2, Add, ShoppingCart } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
 import useAuthStore from '../state/stores/authStore';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useLoading from '../hooks/useLoading';
 import { useNavigate } from 'react-router-dom';
+import useCartStore from '../state/stores/cartStore';
 
 function Navbar() {
   const user = useAuthStore(state => state.user);
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   const isAdmin = useAuthStore(state => state.isAdmin);
   const logout = useAuthStore(state => state.logout);
+
+  const totalItemsCount = useCartStore(state => state.totalItemsCount);
+  const getCart = useCartStore(state => state.getCart);
 
   const navigate = useNavigate();
 
@@ -46,6 +50,10 @@ function Navbar() {
   const closeAccountMenu = useCallback(() => {
     setAnchorEl(null);
   }, []);
+
+  useEffect(() => {
+    getCart();
+  }, [getCart]);
 
   return (
     <AppBar position='static'>
@@ -110,6 +118,18 @@ function Navbar() {
                 open={Boolean(anchorEl)}
                 onClose={closeAccountMenu}
               >
+                <MenuItem
+                  onClick={() => {
+                    navigate('/cart');
+                    closeAccountMenu();
+                  }}
+                >
+                  <ListItemIcon>
+                    <ShoppingCart fontSize='small' />
+                  </ListItemIcon>
+                  <ListItemText>My Cart ({totalItemsCount()})</ListItemText>
+                </MenuItem>
+
                 <MenuItem
                   onClick={() => {
                     navigate('/sell');

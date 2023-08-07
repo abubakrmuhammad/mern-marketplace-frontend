@@ -15,6 +15,16 @@ const useProductsStore = create(set => {
     return isApiSuccessful(response);
   };
 
+  const getProductBySlugOrId = async slugOrId => {
+    const response = await api.get(`/products/${slugOrId}`);
+
+    console.log('getProductBySlugOrId', response);
+
+    set({ currentProduct: response.data.data });
+
+    return isApiSuccessful(response);
+  };
+
   const createProduct = async data => {
     const response = await api.post('/products', data);
 
@@ -51,6 +61,8 @@ const useProductsStore = create(set => {
   return {
     products: [],
     userProducts: [],
+    currentProduct: null,
+    getProductBySlugOrId: catchApiError(getProductBySlugOrId),
     getAllProducts: catchApiError(getAllProducts),
     createProduct: catchApiError(createProduct),
     getAllUserProducts: catchApiError(getAllUserProducts),

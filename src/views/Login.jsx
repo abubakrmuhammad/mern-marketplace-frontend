@@ -85,7 +85,7 @@ function LoginView() {
                   color='primary'
                   disabled={formik.isSubmitting}
                 >
-                  Login
+                  {formik.isSubmitting ? 'Logging In...' : 'Login'}
                 </Button>
               </Grid>
             </Grid>

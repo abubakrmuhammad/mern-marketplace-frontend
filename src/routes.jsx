@@ -10,6 +10,8 @@ import AdminUsers from './views/admin/AdminUsers';
 import AdminOrders from './views/admin/AdminOrders';
 import AdminCategories from './views/admin/AdminCategories';
 import ForgotPasswordView from './views/ForgotPassword';
+import ProductDetailView from './views/ProductDetail';
+import CartView from './views/Cart';
 
 function Router() {
   return (
@@ -19,6 +21,8 @@ function Router() {
         <Route exact path='/login' element={<LoginView />} />
         <Route exact path='/signup' element={<SignUpView />} />
         <Route exact path='/forgot-password' element={<ForgotPasswordView />} />
+        <Route exact path='/p/:slug' element={<ProductDetailView />} />
+        <Route exact path='/cart' element={<CartView />} />
         <Route
           exact
           path='/sell'

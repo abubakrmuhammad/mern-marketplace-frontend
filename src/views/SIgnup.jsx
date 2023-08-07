@@ -108,7 +108,7 @@ const SignUpView = () => {
                   color='primary'
                   disabled={formik.isSubmitting}
                 >
-                  Signup
+                  {formik.isSubmitting ? 'Signing up...' : 'Sign up'}
                 </Button>
               </Grid>
             </Grid>
