@@ -36,6 +36,16 @@ const useCartStore = create((set, get) => {
     return isApiSuccessful(response);
   };
 
+  const clearCart = async () => {
+    const response = await api.delete('/cart/clear');
+
+    console.log('clearCart', response);
+
+    await getCart();
+
+    return isApiSuccessful(response);
+  };
+
   const totalItemsCount = () =>
     get().cart?.items.reduce((acc, item) => acc + item.quantity, 0) || 0;
 
@@ -45,6 +55,7 @@ const useCartStore = create((set, get) => {
     getCart: catchApiError(getCart),
     addToCart: catchApiError(addToCart),
     removeFromCart: catchApiError(removeFromCart),
+    clearCart: catchApiError(clearCart),
   };
 });
 

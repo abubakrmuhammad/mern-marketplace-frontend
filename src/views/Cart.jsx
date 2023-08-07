@@ -22,16 +22,24 @@ import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getApiImageUrl } from '../utils/getApiStorageUrl';
 import useAppStore from '../state/stores/appStore';
+import useCheckoutStore from '../state/stores/checkoutStore';
+import useAuthStore from '../state/stores/authStore';
 
 const CartView = () => {
   const cart = useCartStore(state => state.cart);
   const getCart = useCartStore(state => state.getCart);
   const removeFromCart = useCartStore(state => state.removeFromCart);
+  const clearCart = useCartStore(state => state.clearCart);
 
   const setSuccess = useAppStore(state => state.setSuccess);
 
+  const createCheckout = useCheckoutStore(state => state.createCheckout);
+
+  const user = useAuthStore(state => state.user);
+
   const [cartLoading, cartLoader] = useLoading();
   const [currentRemovingId, setCurrentRemovingId] = useState(null);
+  const [checkoutLoading, checkoutLoader] = useLoading();
 
   const cartItems = cart?.items;
   const cartTotal =
@@ -62,6 +70,38 @@ const CartView = () => {
     },
     [removeFromCart, setSuccess],
   );
+
+  const checkoutHandler = useCallback(async () => {
+    checkoutLoader.startLoading();
+
+    const data = {
+      user: user._id,
+      products: cartItems.map(({ product, quantity }) => ({
+        product: product._id,
+        quantity,
+        price: product.price,
+      })),
+      totalAmount: cartTotal,
+    };
+
+    const success = await createCheckout(data);
+
+    if (success) {
+      const cartSuccess = await clearCart();
+
+      if (cartSuccess) setSuccess('Checkout created successfully.');
+    }
+
+    checkoutLoader.stopLoading();
+  }, [
+    cartItems,
+    cartTotal,
+    checkoutLoader,
+    clearCart,
+    createCheckout,
+    setSuccess,
+    user._id,
+  ]);
 
   return (
     <Layout>
@@ -121,8 +161,10 @@ const CartView = () => {
                   variant='contained'
                   color='primary'
                   startIcon={<ShoppingCartCheckoutIcon />}
+                  onClick={checkoutHandler}
+                  disabled={checkoutLoading}
                 >
-                  Checkout
+                  {checkoutLoading ? 'Checking out...' : 'Checkout'}
                 </Button>
               </>
             )

@@ -14,6 +14,8 @@ import useLoading from '../hooks/useLoading';
 import DefaultLoader from '../components/DefaultLoader';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
+import useCheckoutStore from '../state/stores/checkoutStore';
+import CheckoutAccordion from '../components/CheckoutAccordion';
 
 function ProfileView() {
   const user = useAuthStore(state => state.user);
@@ -22,10 +24,17 @@ function ProfileView() {
     state => state.getAllUserProducts,
   );
 
+  const userCheckouts = useCheckoutStore(state => state.userCheckouts);
+  const getAllUserCheckouts = useCheckoutStore(
+    state => state.getAllUserCheckouts,
+  );
+
   const [productsLoading, productsLoader] = useLoading(true);
-  const [ordersLoading, ordersLoader] = useLoading(true);
+  const [checkoutsLoading, checkoutsLoader] = useLoading(true);
 
   const navigate = useNavigate();
+
+  console.log(userProducts, userCheckouts);
 
   useEffect(() => {
     (async () => {
@@ -37,11 +46,11 @@ function ProfileView() {
 
   useEffect(() => {
     (async () => {
-      ordersLoader.startLoading();
-      // await getAllUserOrders();
-      ordersLoader.stopLoading();
+      checkoutsLoader.startLoading();
+      await getAllUserCheckouts();
+      checkoutsLoader.stopLoading();
     })();
-  }, [ordersLoader]);
+  }, [getAllUserCheckouts, checkoutsLoader]);
 
   return (
     <Layout>
@@ -65,7 +74,7 @@ function ProfileView() {
           <Grid item xs={12} md={6}>
             <Typography variant='h6'>My Products</Typography>
             {productsLoading && <DefaultLoader />}
-            {userProducts.length === 0 && !productsLoader && (
+            {userProducts.length === 0 && !productsLoading && (
               <Box
                 sx={{
                   display: 'flex',
@@ -98,7 +107,25 @@ function ProfileView() {
             </Grid>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Typography variant='h6'>My Orders</Typography>
+            <Typography variant='h6'>My Checkouts</Typography>
+            {checkoutsLoading && <DefaultLoader />}
+            {userCheckouts.length === 0 && !checkoutsLoading && (
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'column',
+                  mt: 2,
+                }}
+              >
+                <Typography variant='h6'>No checkouts found</Typography>
+              </Box>
+            )}
+
+            {userCheckouts.map(checkout => (
+              <CheckoutAccordion checkout={checkout} key={checkout._id} />
+            ))}
           </Grid>
         </Grid>
       </Container>
