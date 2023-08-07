@@ -36,9 +36,9 @@ const menuItems = [
     path: '/admin/categories',
   },
   {
-    text: 'Orders',
+    text: 'Checkouts',
     Icon: ShoppingBagIcon,
-    path: '/admin/orders',
+    path: '/admin/checkouts',
   },
 ];
 

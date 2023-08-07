@@ -34,8 +34,6 @@ function ProfileView() {
 
   const navigate = useNavigate();
 
-  console.log(userProducts, userCheckouts);
-
   useEffect(() => {
     (async () => {
       productsLoader.startLoading();
