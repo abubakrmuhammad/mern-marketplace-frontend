@@ -72,7 +72,7 @@ function AdminCategories() {
   return (
     <AdminLayout>
       <Container>
-        <AddCategoryForm
+        <AddCategoryDialog
           open={addDialogOpen}
           handleClose={() => setAddDialogOpen(false)}
         />
@@ -142,7 +142,7 @@ const validationSchema = Yup.object({
   description: Yup.string(),
 });
 
-function AddCategoryForm({ open, handleClose }) {
+function AddCategoryDialog({ open, handleClose }) {
   const createCategory = useCategoriesStore(state => state.createCategory);
   const setSuccess = useAppStore(state => state.setSuccess);
 

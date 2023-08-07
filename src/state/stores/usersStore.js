@@ -19,6 +19,16 @@ const useUsersStore = create(set => {
     return isApiSuccessful(response);
   };
 
+  const createUser = async data => {
+    const response = await api.post('/users', data);
+
+    console.log('createUser', response);
+
+    await getAllUsers();
+
+    return isApiSuccessful(response);
+  };
+
   const deleteUser = async id => {
     const response = await api.delete(`/users/${id}`);
 
@@ -33,6 +43,7 @@ const useUsersStore = create(set => {
     users: [],
     getAllUsers: catchApiError(getAllUsers),
     deleteUser: catchApiError(deleteUser),
+    createUser: catchApiError(createUser),
   };
 });
 
