@@ -81,7 +81,7 @@ function Router() {
 
         <Route
           exact
-          path='/admin/orders'
+          path='/admin/checkouts'
           element={
             <RequireAuth admin>
               <AdminOrders />
